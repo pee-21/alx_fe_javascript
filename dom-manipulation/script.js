@@ -44,3 +44,63 @@ document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 // NOTE: The following is ONLY needed if the button uses addEventListener
 // But if you are using `<button onclick="addQuote()">` in HTML, do not add this line:
 // document.getElementById("addQuote").addEventListener("click", addQuote);
+
+
+
+
+let quotes = [];
+
+// Load quotes from localStorage or initialize with default quotes
+function loadQuotes() {
+  const storedQuotes = localStorage.getItem("quotes");
+  if (storedQuotes) {
+    quotes = JSON.parse(storedQuotes);
+  } else {
+    quotes = [
+      { text: "Stay hungry, stay foolish.", category: "Inspiration" },
+      { text: "Code is like humor. When you have to explain it, it’s bad.", category: "Programming" }
+    ];
+    saveQuotes(); // Save initial defaults
+  }
+}
+
+// Save quotes to localStorage
+function saveQuotes() {
+  localStorage.setItem("quotes", JSON.stringify(quotes));
+}
+
+// Display a random quote
+function showRandomQuote() {
+  if (quotes.length === 0) return;
+
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  const quote = quotes[randomIndex];
+
+  const display = document.getElementById("quoteDisplay");
+  display.innerHTML = `
+    <p>"${quote.text}"</p>
+    <small>Category: ${quote.category}</small>
+  `;
+
+  // Save last viewed quote to sessionStorage
+  sessionStorage.setItem("lastQuote", JSON.stringify(quote));
+}
+
+// Restore last viewed quote from sessionStorage
+function showLastViewedQuote() {
+  const last = sessionStorage.getItem("lastQuote");
+  if (last) {
+    const quote = JSON.parse(last);
+    const display = document.getElementById("quoteDisplay");
+    display.innerHTML = `
+      <p>"${quote.text}"</p>
+      <small>Category: ${quote.category}</small>
+    `;
+  }
+}
+
+// Add new quote
+function addQuote() {
+  const text = document.getElementById("newQuoteText").value.trim();
+  const ca
+
