@@ -7,19 +7,22 @@
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
-  
-  <!-- Display Area -->
+
   <div id="quoteDisplay"></div>
 
-  <!-- Show Random Quote Button -->
   <button id="newQuote">Show New Quote</button>
 
-  <!-- Add New Quote Form -->
   <div>
     <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
     <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-    <button id="addQuote">Add Quote</button> <!-- MUST match ID or ONCLICK expected -->
+    <button id="addQuote">Add Quote</button>
   </div>
+
+  <br/>
+
+  <!-- Export and Import -->
+  <button id="exportBtn">Export Quotes (JSON)</button>
+  <input type="file" id="importFile" accept=".json" />
 
   <script src="script.js"></script>
 </body>
