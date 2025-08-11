@@ -45,9 +45,6 @@ document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 // But if you are using `<button onclick="addQuote()">` in HTML, do not add this line:
 // document.getElementById("addQuote").addEventListener("click", addQuote);
 
-
-
-
 let quotes = [];
 
 // Load quotes from localStorage or initialize with default quotes
@@ -102,5 +99,70 @@ function showLastViewedQuote() {
 // Add new quote
 function addQuote() {
   const text = document.getElementById("newQuoteText").value.trim();
-  const ca
+  const category = document.getElementById("newQuoteCategory").value.trim();
+
+  if (!text || !category) {
+    alert("Please fill in both the quote and category.");
+    return;
+  }
+
+  const newQuote = { text, category };
+  quotes.push(newQuote);
+  saveQuotes(); // Save to localStorage
+
+  // Optionally display the new quote
+  const display = document.getElementById("quoteDisplay");
+  display.innerHTML = `
+    <p>"${newQuote.text}"</p>
+    <small>Category: ${newQuote.category}</small>
+  `;
+
+  // Clear input fields
+  document.getElementById("newQuoteText").value = "";
+  document.getElementById("newQuoteCategory").value = "";
+}
+
+// Export quotes to JSON file
+function exportToJsonFile() {
+  const dataStr = JSON.stringify(quotes, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "quotes.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Import from JSON file
+function importFromJsonFile(event) {
+  const fileReader = new FileReader();
+  fileReader.onload = function (event) {
+    try {
+      const importedQuotes = JSON.parse(event.target.result);
+      if (Array.isArray(importedQuotes)) {
+        quotes.push(...importedQuotes);
+        saveQuotes();
+        alert("Quotes imported successfully!");
+        showRandomQuote(); // Show a new random quote after import
+      } else {
+        alert("Invalid JSON format.");
+      }
+    } catch (e) {
+      alert("Error parsing file.");
+    }
+  };
+  fileReader.readAsText(event.target.files[0]);
+}
+
+// Setup event listeners
+document.getElementById("newQuote").addEventListener("click", showRandomQuote);
+document.getElementById("addQuote").addEventListener("click", addQuote);
+document.getElementById("exportBtn").addEventListener("click", exportToJsonFile);
+document.getElementById("importFile").addEventListener("change", importFromJsonFile);
+
+// Load quotes and restore last viewed quote (if available)
+loadQuotes();
+showLastViewedQuote();
 
